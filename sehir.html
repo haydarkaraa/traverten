@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vilayet Seyahatnamesi</title>
+    
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; color: #333; }
+        .kapsayici { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #8b0000; border-bottom: 2px solid #eee; padding-bottom: 10px; text-transform: capitalize;}
+        .aciklama { text-align: center; font-style: italic; color: #666; margin-bottom: 30px; }
+        
+        /* Gezilecek Yerler Kartlarının Izgara Sistemi */
+        .yerler-agi { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .yer-karti { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; text-align: center; background: #fafafa; transition: transform 0.3s; }
+        .yer-karti:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .yer-karti img { width: 100%; height: 180px; object-fit: cover; }
+        .yer-karti h3 { font-size: 16px; padding: 15px; margin: 0; color: #222; }
+        
+        .geri-don { display: block; width: max-content; margin: 40px auto 0; padding: 10px 20px; background: #333; color: #fff; text-decoration: none; border-radius: 5px; }
+        .geri-don:hover { background: #555; }
+    </style>
+</head>
+<body>
+
+    <div class="kapsayici">
+        <h1 id="sehir-adi">Şehir Yükleniyor...</h1>
+        <p class="aciklama" id="sehir-aciklamasi"></p>
+        
+        <div class="yerler-agi" id="gezilecek-yerler">
+            </div>
+
+        <a href="index.html" class="geri-don">← Haritaya Raci Ol (Geri Dön)</a>
+    </div>
+
+    <script>
+        // 1. URL'den gönderilen vilayet ismini (örneğin: ?il=istanbul) yakalıyoruz
+        const urlParams = new URLSearchParams(window.location.search);
+        const secilenIl = urlParams.get('il');
+
+        // 2. Devletin Gezilecek Yerler Defteri (Buraya 81 ili dilediğiniz vakit ekleyebilirsiniz)
+        const sehirRehberi = {
+            "istanbul": {
+                baslik: "Dersaadet: İstanbul",
+                aciklama: "Yedi tepeli, iki kıtayı birbirine bağlayan kadim payitaht.",
+                yerler: [
+                    { ad: "Ayasofya-i Kebir Cami-i Şerifi", gorsel: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=500&q=60" },
+                    { ad: "Topkapı Sarayı", gorsel: "https://images.unsplash.com/photo-1588263595697-3850450531bd?auto=format&fit=crop&w=500&q=60" },
+                    { ad: "Galata Kulesi", gorsel: "https://images.unsplash.com/photo-1545459720-aac8509eb02c?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            "ankara": {
+                baslik: "Ankara",
+                aciklama: "Bozkırın ortasında yükselen Cumhuriyetin kalbi.",
+                yerler: [
+                    { ad: "Anıtkabir", gorsel: "https://images.unsplash.com/photo-1585860431306-651bf2d4ceee?auto=format&fit=crop&w=500&q=60" },
+                    { ad: "Anadolu Medeniyetleri Müzesi", gorsel: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?auto=format&fit=crop&w=500&q=60" }
+                ]
+            }
+        };
+
+        // 3. Ekrana Nakşetme İşlemi
+        if (secilenIl && sehirRehberi[secilenIl]) {
+            const veriler = sehirRehberi[secilenIl];
+            
+            // Başlık ve açıklamayı yazdır
+            document.getElementById('sehir-adi').innerText = veriler.baslik;
+            document.getElementById('sehir-aciklamasi').innerText = veriler.aciklama;
+
+            // Gezilecek yerleri döngüye sokup kartları oluştur
+            let kartHTML = "";
+            veriler.yerler.forEach(yer => {
+                kartHTML += `
+                    <div class="yer-karti">
+                        <img src="${yer.gorsel}" alt="${yer.ad}">
+                        <h3>${yer.ad}</h3>
+                    </div>
+                `;
+            });
+            document.getElementById('gezilecek-yerler').innerHTML = kartHTML;
+
+        } else {
+            // Eğer rehberde olmayan bir ile tıklanırsa
+            document.getElementById('sehir-adi').innerText = secilenIl + " Vilayeti";
+            document.getElementById('sehir-aciklamasi').innerText = "Bu nadide şehrimizin gezilecek yerler defteri henüz yazılmamıştır.";
+        }
+    </script>
+
+</body>
+</html>
