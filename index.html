@@ -14,38 +14,49 @@
             padding: 20px;
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-        }
+        h2 { text-align: center; color: #333; }
 
-        /* Haritanın içine oturacağı kutunun ayarları */
+        /* Haritanın kutusu */
         #harita-alani {
             width: 100%;
             max-width: 900px;
-            margin: 0 auto; /* Haritayı tam ortaya hizalar */
+            margin: 0 auto; 
             display: block;
         }
 
-        /* AŞAĞIDAKİ KODLAR DIŞARIDAN GELECEK SVG'Yİ ETKİLER 
-           (Renk, çizgi ve fareyle üzerine gelme efektleri)
-        */
-        #harita-alani svg {
-            width: 100%;
-            height: auto;
-        }
+        #harita-alani svg { width: 100%; height: auto; }
 
+        /* 1. İLLERİN STANDART GÖRÜNÜMÜ VE ANİMASYON AYARLARI */
         #harita-alani svg path {
-            fill: #cccccc; /* İllerin varsayılan rengi (Açık Gri) */
-            stroke: #ffffff; /* İller arası sınır çizgisi rengi (Beyaz) */
+            fill: #cccccc; 
+            stroke: #ffffff; 
             stroke-width: 1.5;
             cursor: pointer;
-            transition: fill 0.3s ease; /* Renk geçişini yumuşatır */
+            transition: all 0.3s ease; /* Renk ve büyüme animasyonunu yumuşatır */
+            transform-origin: center;  /* Büyümenin şeklin merkezinden olmasını sağlar */
+            transform-box: fill-box;   /* SVG şekillerinin merkezini doğru bulması için şarttır */
         }
 
-        /* Fare ile ilin üzerine gelince (Hover efekti) */
+        /* 2. FAREYLE ÜZERİNE GELİNCE OLACAKLAR (Kırmızı & %10 Büyüme) */
         #harita-alani svg path:hover {
-            fill: #ffaa00; /* Üzerine gelince Turuncu olsun */
+            fill: #ff0000; /* Rengi kırmızı yapar */
+            transform: scale(1.1); /* Boyutu %10 büyütür */
+        }
+
+        /* 3. İMLECİ TAKİP EDEN İSİM KUTUSU (Tooltip) TASARIMI */
+        #isim-kutusu {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8); /* Yarı saydam siyah arka plan */
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 15px;
+            pointer-events: none; /* Farenin kutuya takılıp titremesini önler */
+            display: none; /* Başlangıçta gizli tutarız */
+            transform: translate(-50%, -100%); /* Kutuyu imlecin tam ortası ve üstüne hizalar */
+            margin-top: -15px; /* İmleçten biraz yukarıda durması için boşluk */
+            white-space: nowrap;
+            z-index: 100;
         }
     </style>
 </head>
@@ -53,46 +64,63 @@
 
     <h2>Lütfen Bir İl Seçiniz</h2>
 
+    <div id="isim-kutusu"></div>
+
     <div id="harita-alani">
         <p style="text-align:center; color:#666;">Harita yükleniyor...</p>
     </div>
 
     <script>
-        // 1. ADIM: Aynı klasördeki 'turkey.svg' dosyasını okuyoruz
         fetch('turkey.svg')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("SVG dosyası bulunamadı!");
-                }
-                return response.text();
-            })
+            .then(response => response.text())
             .then(svgKod => {
-                // 2. ADIM: Okunan kodları HTML'deki boş kutumuzun içine yazdırıyoruz
                 document.getElementById('harita-alani').innerHTML = svgKod;
 
-                // 3. ADIM: Harita artık sayfada var, şimdi tıklama özelliğini ekliyoruz
                 const iller = document.querySelectorAll("#harita-alani svg path");
+                const isimKutusu = document.getElementById("isim-kutusu");
 
                 iller.forEach(il => {
-                    il.addEventListener("click", function() {
-                        // Tıklanan ilin 'id' niteliğini alıyoruz (Örn: "istanbul", "ankara")
-                        const ilID = this.getAttribute("id"); 
+                    // Fare ilin sınırlarına girdiğinde
+                    il.addEventListener("mouseenter", function(e) {
+                        // BÜYÜYEN İLİN ÜSTTE KALMASI İÇİN TRICK: Çizimi SVG'nin en sonuna taşır
+                        this.parentNode.appendChild(this);
+
+                        // İlin ismini alıyoruz (Kullandığın SVG'de isim 'id' olarak kayıtlı varsayıyoruz)
+                        let ilID = this.getAttribute("id");
                         
                         if (ilID) {
-                            // Tıklanan ilin ismine göre yeni sayfaya yönlendiriyoruz
+                            // ismin baş harfini büyütmek için ufak bir metin düzenlemesi
+                            let gorunenIsim = ilID.charAt(0).toUpperCase() + ilID.slice(1);
+                            
+                            // Kutunun içine ismi yazdır ve kutuyu görünür yap
+                            isimKutusu.innerHTML = gorunenIsim;
+                            isimKutusu.style.display = "block"; 
+                        }
+                    });
+
+                    // Fare ilin üzerinde hareket ettikçe
+                    il.addEventListener("mousemove", function(e) {
+                        // Kutunun koordinatlarını farenin o anki (X, Y) koordinatlarına eşitliyoruz
+                        isimKutusu.style.left = e.pageX + "px";
+                        isimKutusu.style.top = e.pageY + "px";
+                    });
+
+                    // Fare ilden çıkınca
+                    il.addEventListener("mouseleave", function() {
+                        // İsim kutusunu tekrar gizle
+                        isimKutusu.style.display = "none";
+                    });
+
+                    // İle Tıklanınca yeni sayfaya gitme
+                    il.addEventListener("click", function() {
+                        const ilID = this.getAttribute("id"); 
+                        if (ilID) {
                             window.location.href = ilID + ".html";
-                        } else {
-                            console.log("Uyarı: Tıklanan ilin ID değeri yok.");
                         }
                     });
                 });
             })
-            .catch(hata => {
-                // Eğer fetch komutu hata verirse ekranda uyarı gösteriyoruz
-                console.error("Harita Yükleme Hatası:", hata);
-                document.getElementById('harita-alani').innerHTML = 
-                    "<p style='color:red; text-align:center;'>Harita yüklenemedi. HTML dosyasını doğrudan çift tıklayarak değil, bir yerel sunucu (Localhost/Live Server) üzerinden açtığınızdan emin olun.</p>";
-            });
+            .catch(hata => console.error("Harita Yükleme Hatası:", hata));
     </script>
 
 </body>
