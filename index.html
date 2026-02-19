@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İnteraktif Türkiye Haritası</title>
+    
+    <style>
+        /* Genel sayfa tasarımı */
+        body {
+            font-family: sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Haritanın içine oturacağı kutunun ayarları */
+        #harita-alani {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto; /* Haritayı tam ortaya hizalar */
+            display: block;
+        }
+
+        /* AŞAĞIDAKİ KODLAR DIŞARIDAN GELECEK SVG'Yİ ETKİLER 
+           (Renk, çizgi ve fareyle üzerine gelme efektleri)
+        */
+        #harita-alani svg {
+            width: 100%;
+            height: auto;
+        }
+
+        #harita-alani svg path {
+            fill: #cccccc; /* İllerin varsayılan rengi (Açık Gri) */
+            stroke: #ffffff; /* İller arası sınır çizgisi rengi (Beyaz) */
+            stroke-width: 1.5;
+            cursor: pointer;
+            transition: fill 0.3s ease; /* Renk geçişini yumuşatır */
+        }
+
+        /* Fare ile ilin üzerine gelince (Hover efekti) */
+        #harita-alani svg path:hover {
+            fill: #ffaa00; /* Üzerine gelince Turuncu olsun */
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Lütfen Bir İl Seçiniz</h2>
+
+    <div id="harita-alani">
+        <p style="text-align:center; color:#666;">Harita yükleniyor...</p>
+    </div>
+
+    <script>
+        // 1. ADIM: Aynı klasördeki 'turkey.svg' dosyasını okuyoruz
+        fetch('turkey.svg')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("SVG dosyası bulunamadı!");
+                }
+                return response.text();
+            })
+            .then(svgKod => {
+                // 2. ADIM: Okunan kodları HTML'deki boş kutumuzun içine yazdırıyoruz
+                document.getElementById('harita-alani').innerHTML = svgKod;
+
+                // 3. ADIM: Harita artık sayfada var, şimdi tıklama özelliğini ekliyoruz
+                const iller = document.querySelectorAll("#harita-alani svg path");
+
+                iller.forEach(il => {
+                    il.addEventListener("click", function() {
+                        // Tıklanan ilin 'id' niteliğini alıyoruz (Örn: "istanbul", "ankara")
+                        const ilID = this.getAttribute("id"); 
+                        
+                        if (ilID) {
+                            // Tıklanan ilin ismine göre yeni sayfaya yönlendiriyoruz
+                            window.location.href = ilID + ".html";
+                        } else {
+                            console.log("Uyarı: Tıklanan ilin ID değeri yok.");
+                        }
+                    });
+                });
+            })
+            .catch(hata => {
+                // Eğer fetch komutu hata verirse ekranda uyarı gösteriyoruz
+                console.error("Harita Yükleme Hatası:", hata);
+                document.getElementById('harita-alani').innerHTML = 
+                    "<p style='color:red; text-align:center;'>Harita yüklenemedi. HTML dosyasını doğrudan çift tıklayarak değil, bir yerel sunucu (Localhost/Live Server) üzerinden açtığınızdan emin olun.</p>";
+            });
+    </script>
+
+</body>
+</html>
