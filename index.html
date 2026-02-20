@@ -24,8 +24,9 @@
 
         #harita-alani svg { width: 100%; height: auto; }
 
+       /* İllerin varsayılan rengi (Açık Kırmızı) */
         #harita-alani svg path {
-            fill: #ec7979; 
+            fill: #ff9999 !important; /* !important komutu ile SVG'nin içindeki griyi eziyoruz */
             stroke: #ffffff; 
             stroke-width: 1.5;
             cursor: pointer;
@@ -34,9 +35,9 @@
             transform-box: fill-box;   
         }
 
-        /* İlin Üzerine Gelince (Kırmızı ve Büyüme) */
+        /* İlin Üzerine Gelince (Koyu Kırmızı ve Büyüme) */
         #harita-alani svg path:hover {
-            fill: #a50c0c; 
+            fill: #8b0000 !important; /* !important komutunu buraya da ekledik */
             transform: scale(1.2); 
         }
 
