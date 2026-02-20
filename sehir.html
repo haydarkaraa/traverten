@@ -6,170 +6,203 @@
     <title>Şehir Rehberi</title>
     
     <style>
-        /* Genel sayfa ayarları */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f4f6f9;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             color: #333;
         }
 
-        /* İçeriği ortalayan ana kutu */
-        .icerik-kutusu {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        /* Üst Kısım (Başlık Alanı) */
+        .baslik-alani {
+            background-color: #8b0000; /* Haritadaki koyu kırmızıyla uyumlu */
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* Başlıklar ve açıklamalar */
-        h1 {
-            text-align: center;
-            color: #d32f2f; /* Kırmızımsı hoş bir renk */
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-            margin-top: 0;
+        .baslik-alani h1 {
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: 2px;
             text-transform: capitalize;
         }
-        
-        .kisa-bilgi {
-            text-align: center;
+
+        .baslik-alani p {
+            margin-top: 10px;
             font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
+            opacity: 0.9;
             font-style: italic;
         }
 
-        /* Gezilecek Yerler - Kart Tasarımı (Grid Sistemi) */
-        .yerler-listesi {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+        /* İçerik ve Kartların Dizilimi */
+        .icerik-kapsayici {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        .yer-karti {
-            background: #fff;
-            border-radius: 10px;
+        .yerler-izgarasi {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Mekan Kartı Tasarımı */
+        .mekan-karti {
+            background: white;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .yer-karti:hover {
-            transform: translateY(-5px); /* Üzerine gelince kart hafifçe yukarı kalkar */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        .mekan-karti:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(139, 0, 0, 0.15); /* Hover'da hafif kırmızımsı gölge */
         }
 
-        .yer-karti img {
+        .mekan-karti img {
             width: 100%;
-            height: 200px;
-            object-fit: cover; /* Resimlerin bozulmadan kutuya sığmasını sağlar */
+            height: 220px;
+            object-fit: cover;
         }
 
-        .yer-karti h3 {
-            padding: 15px;
+        .mekan-icerik {
+            padding: 20px;
+        }
+
+        .mekan-icerik h3 {
+            margin: 0 0 10px 0;
+            color: #8b0000;
+            font-size: 20px;
+        }
+
+        .mekan-icerik p {
             margin: 0;
-            font-size: 18px;
-            text-align: center;
-            color: #222;
+            color: #555;
+            line-height: 1.5;
+            font-size: 15px;
         }
 
         /* Geri Dön Butonu */
-        .geri-don-butonu {
-            display: block;
-            width: max-content;
-            margin: 40px auto 0;
-            padding: 12px 25px;
+        .geri-don {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 24px;
             background-color: #333;
             color: white;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: bold;
-            transition: background-color 0.3s;
+            transition: background 0.3s;
         }
 
-        .geri-don-butonu:hover {
-            background-color: #d32f2f;
+        .geri-don:hover {
+            background-color: #555;
+        }
+
+        /* Hata Ekranı */
+        .hata-mesaji {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
     </style>
 </head>
 <body>
 
-    <div class="icerik-kutusu">
-        <h1 id="sehir-baslik">Şehir Yükleniyor...</h1>
-        <p class="kisa-bilgi" id="sehir-aciklama"></p>
-        
-        <div class="yerler-listesi" id="gezilecek-yerler"></div>
+    <div class="baslik-alani">
+        <h1 id="sayfa-basligi">Yükleniyor...</h1>
+        <p id="sayfa-aciklamasi"></p>
+    </div>
 
-        <a href="index.html" class="geri-don-butonu">← Haritaya Geri Dön</a>
+    <div class="icerik-kapsayici">
+        <div class="yerler-izgarasi" id="mekanlar-alani">
+            </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="geri-don">← Haritaya Geri Dön</a>
+        </div>
     </div>
 
     <script>
-        // 1. ADIM: URL'den hangi ilin seçildiğini buluyoruz (Örn: sehir.html?il=istanbul)
+        // 1. URL'den hangi şehrin tıklandığını anlıyoruz (Örn: ?il=bursa)
         const urlParametreleri = new URLSearchParams(window.location.search);
         const secilenIl = urlParametreleri.get('il');
 
-        // 2. ADIM: Veritabanımız (İstediğin kadar ili ve mekanı buraya ekleyebilirsin)
-        const sehirVeritabanimiz = {
+        // 2. Şehirlerin ve mekanların veritabanı
+        const sehirRehberi = {
             "istanbul": {
-                isim: "İstanbul",
-                detay: "İki kıtayı birbirine bağlayan, tarihi ve kültürel zenginlikleriyle dünyanın incisi.",
+                baslik: "İstanbul",
+                aciklama: "İki kıtayı birbirine bağlayan, kadim medeniyetlerin başkenti.",
                 mekanlar: [
-                    { ad: "Ayasofya Camii", gorsel: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=600&q=80" },
-                    { ad: "Galata Kulesi", gorsel: "https://images.unsplash.com/photo-1545459720-aac8509eb02c?auto=format&fit=crop&w=600&q=80" },
-                    { ad: "Topkapı Sarayı", gorsel: "https://images.unsplash.com/photo-1588263595697-3850450531bd?auto=format&fit=crop&w=600&q=80" }
+                    { ad: "Topkapı Sarayı", gorsel: "https://images.unsplash.com/photo-1588263595697-3850450531bd?auto=format&fit=crop&w=600&q=80", yazi: "Osmanlı padişahlarının yüzyıllarca devleti yönettiği muazzam saray." },
+                    { ad: "Ayasofya-i Kebir Cami-i Şerifi", gorsel: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=600&q=80", yazi: "Dünya mimarlık tarihinin en önemli ve ihtişamlı anıtlarından biri." },
+                    { ad: "Galata Kulesi", gorsel: "https://images.unsplash.com/photo-1545459720-aac8509eb02c?auto=format&fit=crop&w=600&q=80", yazi: "İstanbul'u kuşbakışı izleyebileceğiniz, şehrin en eski simgelerinden." }
+                ]
+            },
+            "bursa": {
+                baslik: "Bursa",
+                aciklama: "Osmanlı'nın kuruluşuna şahitlik etmiş ulu çınarlar diyarı.",
+                mekanlar: [
+                    { ad: "Bursa Ulu Camii", gorsel: "https://images.unsplash.com/photo-1621203591931-1e9a31a986e6?auto=format&fit=crop&w=600&q=80", yazi: "Yıldırım Bayezid tarafından yaptırılan, çok kubbeli anıtsal yapı." },
+                    { ad: "Osman Gazi Türbesi", gorsel: "https://images.unsplash.com/photo-1662998399557-cd64ec0e27a6?auto=format&fit=crop&w=600&q=80", yazi: "Osmanlı Devleti'nin kurucusu Osman Bey'in istirahatgahı." },
+                    { ad: "Koza Han", gorsel: "https://images.unsplash.com/photo-1600705722908-bab1b8f1c4e7?auto=format&fit=crop&w=600&q=80", yazi: "Tarihi İpek Yolu'nun en önemli ticaret merkezlerinden biri." }
                 ]
             },
             "ankara": {
-                isim: "Ankara",
-                detay: "Cumhuriyetimizin başkenti, tarihi müzeleri ve parklarıyla modern bir şehir.",
+                baslik: "Ankara",
+                aciklama: "Milli mücadelenin ve Cumhuriyetin kalbi olan başkentimiz.",
                 mekanlar: [
-                    { ad: "Anıtkabir", gorsel: "https://images.unsplash.com/photo-1585860431306-651bf2d4ceee?auto=format&fit=crop&w=600&q=80" },
-                    { ad: "Anadolu Medeniyetleri Müzesi", gorsel: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?auto=format&fit=crop&w=600&q=80" }
-                ]
-            },
-            "izmir": {
-                isim: "İzmir",
-                detay: "Ege'nin incisi, kordon boyu ve tarihi asansörüyle büyüleyen güzel İzmir.",
-                mekanlar: [
-                    { ad: "İzmir Saat Kulesi", gorsel: "https://images.unsplash.com/photo-1596395819057-cb3738f4e556?auto=format&fit=crop&w=600&q=80" },
-                    { ad: "Efes Antik Kenti", gorsel: "https://images.unsplash.com/photo-1566802553195-2fcb1b3fb3ff?auto=format&fit=crop&w=600&q=80" }
+                    { ad: "Anıtkabir", gorsel: "https://images.unsplash.com/photo-1585860431306-651bf2d4ceee?auto=format&fit=crop&w=600&q=80", yazi: "Gazi Mustafa Kemal Atatürk'ün ebedi istirahatgahı." },
+                    { ad: "Anadolu Medeniyetleri Müzesi", gorsel: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?auto=format&fit=crop&w=600&q=80", yazi: "Anadolu'nun binlerce yıllık tarihine ışık tutan eşsiz koleksiyonlar." }
                 ]
             }
         };
 
-        // 3. ADIM: Bilgileri sayfaya yazdırma
-        if (secilenIl && sehirVeritabanimiz[secilenIl]) {
-            // Eğer seçilen il veritabanımızda varsa bilgileri çekiyoruz
-            const ilBilgileri = sehirVeritabanimiz[secilenIl];
-            
-            document.getElementById('sehir-baslik').innerText = ilBilgileri.isim + " Gezilecek Yerler";
-            document.getElementById('sehir-aciklama').innerText = ilBilgileri.detay;
+        // 3. Ekrana yazdırma işlemleri
+        const mekanlarAlani = document.getElementById('mekanlar-alani');
+        const baslikElementi = document.getElementById('sayfa-basligi');
+        const aciklamaElementi = document.getElementById('sayfa-aciklamasi');
 
-            // Mekanları tek tek HTML kartlarına dönüştürüyoruz
-            let htmlIcerik = "";
-            ilBilgileri.mekanlar.forEach(mekan => {
-                htmlIcerik += `
-                    <div class="yer-karti">
+        if (secilenIl && sehirRehberi[secilenIl]) {
+            const veriler = sehirRehberi[secilenIl];
+            
+            baslikElementi.innerText = veriler.baslik;
+            aciklamaElementi.innerText = veriler.aciklama;
+
+            let kartlarHTML = "";
+            veriler.mekanlar.forEach(mekan => {
+                kartlarHTML += `
+                    <div class="mekan-karti">
                         <img src="${mekan.gorsel}" alt="${mekan.ad}">
-                        <h3>${mekan.ad}</h3>
+                        <div class="mekan-icerik">
+                            <h3>${mekan.ad}</h3>
+                            <p>${mekan.yazi}</p>
+                        </div>
                     </div>
                 `;
             });
-            
-            // Hazırladığımız kartları sayfadaki ilgili yere ekliyoruz
-            document.getElementById('gezilecek-yerler').innerHTML = htmlIcerik;
+            mekanlarAlani.innerHTML = kartlarHTML;
 
         } else {
-            // Eğer henüz eklemediğin bir ile tıklanırsa bu mesaj çıkar
-            let formatliIsim = secilenIl ? secilenIl.charAt(0).toUpperCase() + secilenIl.slice(1) : "Bilinmeyen Şehir";
-            document.getElementById('sehir-baslik').innerText = formatliIsim;
-            document.getElementById('sehir-aciklama').innerText = "Bu şehrimiz için gezilecek yerler listesi henüz hazırlanmamıştır. Çok yakında eklenecektir!";
+            // Henüz verisi girilmemiş bir ile tıklanırsa
+            let formatliIsim = secilenIl ? secilenIl.charAt(0).toUpperCase() + secilenIl.slice(1) : "Şehir";
+            baslikElementi.innerText = formatliIsim;
+            aciklamaElementi.innerText = "Detaylar hazırlanıyor...";
+            
+            mekanlarAlani.innerHTML = `
+                <div class="hata-mesaji" style="grid-column: 1 / -1;">
+                    <h2>Bu şehrin rehberi henüz hazır değil.</h2>
+                    <p>Çok yakında ${formatliIsim} için gezilecek yerler listesi buraya eklenecektir.</p>
+                </div>
+            `;
         }
     </script>
-
 </body>
 </html>
