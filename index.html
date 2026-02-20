@@ -13,7 +13,13 @@
             padding: 20px;
         }
 
-        h2 { text-align: center; color: #333; }
+        /* Başlık için özel ayarlar ve renk geçişi (transition) */
+        #harita-basligi { 
+            text-align: center; 
+            color: #333; 
+            transition: color 0.3s ease;
+            min-height: 40px; /* Yazı değişirken sayfanın zıplamasını engeller */
+        }
 
         #harita-alani {
             width: 100%;
@@ -24,9 +30,8 @@
 
         #harita-alani svg { width: 100%; height: auto; }
 
-       /* İllerin varsayılan rengi (Açık Kırmızı) */
         #harita-alani svg path {
-            fill: #ff9999 !important; /* !important komutu ile SVG'nin içindeki griyi eziyoruz */
+            fill: #ff9999 !important; 
             stroke: #ffffff; 
             stroke-width: 1.5;
             cursor: pointer;
@@ -37,33 +42,14 @@
 
         /* İlin Üzerine Gelince (Koyu Kırmızı ve Büyüme) */
         #harita-alani svg path:hover {
-            fill: #8b0000 !important; /* !important komutunu buraya da ekledik */
+            fill: #8b0000 !important; 
             transform: scale(1.2); 
-        }
-
-        /* YENİ: ŞEFFAF İSİM KUTUSU TASARIMI */
-        #isim-kutusu {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.5); /* %50 Şeffaf siyah arka plan */
-            color: rgba(255, 255, 255, 0.95); /* Hafif şeffaf beyaz yazı */
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 16px;
-            letter-spacing: 1px;
-            pointer-events: none; /* Farenin takılmasını engeller */
-            opacity: 0; /* Başlangıçta tamamen görünmez */
-            transition: opacity 0.3s ease; /* Ekrana yumuşak bir şekilde gelmesini sağlar */
-            z-index: 1000;
-            transform: translate(-50%, -150%); /* Yazıyı farenin biraz üstüne ortalar */
-            backdrop-filter: blur(2px); /* Arka plana çok şık, hafif bir bulanıklık katar */
         }
     </style>
 </head>
 <body>
 
-    <h2>Lütfen Bir İl Seçiniz</h2>
-
-    <div id="isim-kutusu"></div>
+    <h2 id="harita-basligi">Lütfen Bir İl Seçiniz</h2>
 
     <div id="harita-alani">
         <p style="text-align:center; color:#666;">Harita yükleniyor...</p>
@@ -76,44 +62,34 @@
                 document.getElementById('harita-alani').innerHTML = svgKod;
 
                 const iller = document.querySelectorAll("#harita-alani svg path");
-                const isimKutusu = document.getElementById("isim-kutusu");
-                let beklemeSuresi; // 0.5 saniyeyi sayacak olan saatimiz
+                
+                // Başlık elementini ve varsayılan yazıyı hafızaya alıyoruz
+                const haritaBasligi = document.getElementById("harita-basligi");
+                const varsayilanYazi = "Lütfen Bir İl Seçiniz";
 
                 iller.forEach(il => {
-                    // 1. İlin üzerine fareyle girildiğinde
-                    il.addEventListener("mouseenter", function(e) {
-                        
-                        // NOT: "appendChild(this)" kodunu çakışma yarattığı için kaldırdık.
-
+                    // 1. Fare ilin üzerine geldiğinde
+                    il.addEventListener("mouseenter", function() {
                         const ilID = this.getAttribute("id");
                         
                         if (ilID) {
+                            // İsmin ilk harfini büyütüyoruz
                             let gorunenIsim = ilID.charAt(0).toUpperCase() + ilID.slice(1);
                             
-                            // TAM 0.5 SANİYE BEKLE VE YAZIYI GÖSTER
-                            beklemeSuresi = setTimeout(() => {
-                                isimKutusu.innerHTML = gorunenIsim;
-                                isimKutusu.style.opacity = "1"; // Şeffaf kutuyu görünür yap
-                            }, 500); 
+                            // Başlığı şehrin ismiyle değiştir ve rengini haritayla uyumlu yap
+                            haritaBasligi.innerText = gorunenIsim;
+                            haritaBasligi.style.color = "#8b0000"; 
                         }
                     });
 
-                    // 2. Fare ilin üzerinde hareket ettikçe kutuyu fareye yapıştır
-                    il.addEventListener("mousemove", function(e) {
-                        isimKutusu.style.left = e.pageX + "px";
-                        isimKutusu.style.top = e.pageY + "px";
-                    });
-
-                    // 3. Fare ilden çıkarsa
+                    // 2. Fare ilden çıktığında (Boşluğa gelindiğinde)
                     il.addEventListener("mouseleave", function() {
-                        // Eğer 0.5 saniye dolmadan fareyi çekerse, yazının çıkmasını iptal et
-                        clearTimeout(beklemeSuresi); 
-                        
-                        // Kutuyu tekrar görünmez yap
-                        isimKutusu.style.opacity = "0"; 
+                        // Başlığı tekrar eski haline ve eski rengine döndür
+                        haritaBasligi.innerText = varsayilanYazi;
+                        haritaBasligi.style.color = "#333"; 
                     });
 
-                    // 4. İle tıklanınca sayfaya git
+                    // 3. Tıklanınca detay sayfasına git
                     il.addEventListener("click", function() {
                         const ilID = this.getAttribute("id"); 
                         if (ilID) {
