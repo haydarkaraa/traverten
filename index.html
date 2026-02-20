@@ -81,15 +81,15 @@
                 iller.forEach(il => {
                     // 1. İlin üzerine fareyle girildiğinde
                     il.addEventListener("mouseenter", function(e) {
-                        // Büyüyen ilin diğerlerinin altında kalmasını engeller
-                        this.parentNode.appendChild(this);
+                        
+                        // NOT: "appendChild(this)" kodunu çakışma yarattığı için kaldırdık.
 
                         const ilID = this.getAttribute("id");
                         
                         if (ilID) {
                             let gorunenIsim = ilID.charAt(0).toUpperCase() + ilID.slice(1);
                             
-                            // TAM 0.5 SANİYE (500 milisaniye) BEKLE VE YAZIYI GÖSTER
+                            // TAM 0.5 SANİYE BEKLE VE YAZIYI GÖSTER
                             beklemeSuresi = setTimeout(() => {
                                 isimKutusu.innerHTML = gorunenIsim;
                                 isimKutusu.style.opacity = "1"; // Şeffaf kutuyu görünür yap
