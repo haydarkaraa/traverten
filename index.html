@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İnteraktif Türkiye Haritası</title>
+    <title>Traverten Türkiye Haritası</title>
     
     <style>
-        /* Genel sayfa tasarımı */
         body {
             font-family: sans-serif;
             background-color: #f8f9fa;
@@ -16,7 +15,6 @@
 
         h2 { text-align: center; color: #333; }
 
-        /* Haritanın kutusu */
         #harita-alani {
             width: 100%;
             max-width: 900px;
@@ -26,37 +24,37 @@
 
         #harita-alani svg { width: 100%; height: auto; }
 
-        /* 1. İLLERİN STANDART GÖRÜNÜMÜ VE ANİMASYON AYARLARI */
         #harita-alani svg path {
             fill: #cccccc; 
             stroke: #ffffff; 
             stroke-width: 1.5;
             cursor: pointer;
-            transition: all 0.3s ease; /* Renk ve büyüme animasyonunu yumuşatır */
-            transform-origin: center;  /* Büyümenin şeklin merkezinden olmasını sağlar */
-            transform-box: fill-box;   /* SVG şekillerinin merkezini doğru bulması için şarttır */
+            transition: all 0.3s ease; 
+            transform-origin: center;  
+            transform-box: fill-box;   
         }
 
-        /* 2. FAREYLE ÜZERİNE GELİNCE OLACAKLAR (Kırmızı & %10 Büyüme) */
+        /* İlin Üzerine Gelince (Kırmızı ve Büyüme) */
         #harita-alani svg path:hover {
-            fill: #ff0000; /* Rengi kırmızı yapar */
-            transform: scale(1.1); /* Boyutu %10 büyütür */
+            fill: #ff0000; 
+            transform: scale(1.2); 
         }
 
-        /* 3. İMLECİ TAKİP EDEN İSİM KUTUSU (Tooltip) TASARIMI */
+        /* YENİ: ŞEFFAF İSİM KUTUSU TASARIMI */
         #isim-kutusu {
             position: absolute;
-            background-color: rgba(0, 0, 0, 0.8); /* Yarı saydam siyah arka plan */
-            color: white;
+            background-color: rgba(0, 0, 0, 0.5); /* %50 Şeffaf siyah arka plan */
+            color: rgba(255, 255, 255, 0.95); /* Hafif şeffaf beyaz yazı */
             padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 15px;
-            pointer-events: none; /* Farenin kutuya takılıp titremesini önler */
-            display: none; /* Başlangıçta gizli tutarız */
-            transform: translate(-50%, -100%); /* Kutuyu imlecin tam ortası ve üstüne hizalar */
-            margin-top: -15px; /* İmleçten biraz yukarıda durması için boşluk */
-            white-space: nowrap;
-            z-index: 100;
+            border-radius: 6px;
+            font-size: 16px;
+            letter-spacing: 1px;
+            pointer-events: none; /* Farenin takılmasını engeller */
+            opacity: 0; /* Başlangıçta tamamen görünmez */
+            transition: opacity 0.3s ease; /* Ekrana yumuşak bir şekilde gelmesini sağlar */
+            z-index: 1000;
+            transform: translate(-50%, -150%); /* Yazıyı farenin biraz üstüne ortalar */
+            backdrop-filter: blur(2px); /* Arka plana çok şık, hafif bir bulanıklık katar */
         }
     </style>
 </head>
@@ -71,39 +69,60 @@
     </div>
 
     <script>
-    // 1. ADIM: Aynı klasördeki 'turkey.svg' dosyasını okuyoruz
-    fetch('turkey.svg')
-        .then(response => response.text())
-        .then(svgKod => {
-            // 2. ADIM: Okunan haritayı sayfadaki alana yerleştiriyoruz
-            document.getElementById('harita-alani').innerHTML = svgKod;
+        fetch('turkey.svg')
+            .then(response => response.text())
+            .then(svgKod => {
+                document.getElementById('harita-alani').innerHTML = svgKod;
 
-            // 3. ADIM: Haritadaki tüm illeri (path etiketlerini) seçiyoruz
-            const iller = document.querySelectorAll("#harita-alani svg path");
+                const iller = document.querySelectorAll("#harita-alani svg path");
+                const isimKutusu = document.getElementById("isim-kutusu");
+                let beklemeSuresi; // 0.5 saniyeyi sayacak olan saatimiz
 
-            iller.forEach(il => {
-                // İlin ID değerini (örn: "istanbul", "ankara") alıyoruz
-                const ilID = il.getAttribute("id"); 
-                
-                if (ilID) {
-                    // İsmin baş harfini büyütüyoruz (istanbul -> İstanbul)
-                    let gorunenIsim = ilID.charAt(0).toUpperCase() + ilID.slice(1);
-                    
-                    // İŞTE PÜF NOKTASI: Tarayıcıya "fare üzerine gelince bu ismi göster" diyoruz
-                    il.setAttribute("title", gorunenIsim);
-                }
+                iller.forEach(il => {
+                    // 1. İlin üzerine fareyle girildiğinde
+                    il.addEventListener("mouseenter", function(e) {
+                        // Büyüyen ilin diğerlerinin altında kalmasını engeller
+                        this.parentNode.appendChild(this);
 
-                // İle tıklandığında sehir.html sayfasına yönlendirme işlemi
-                il.addEventListener("click", function() {
-                    if (ilID) {
-                        // Tıklanan ilin adını linke ekleyerek detay sayfasına gönderiyoruz
-                        window.location.href = "sehir.html?il=" + ilID;
-                    }
+                        const ilID = this.getAttribute("id");
+                        
+                        if (ilID) {
+                            let gorunenIsim = ilID.charAt(0).toUpperCase() + ilID.slice(1);
+                            
+                            // TAM 0.5 SANİYE (500 milisaniye) BEKLE VE YAZIYI GÖSTER
+                            beklemeSuresi = setTimeout(() => {
+                                isimKutusu.innerHTML = gorunenIsim;
+                                isimKutusu.style.opacity = "1"; // Şeffaf kutuyu görünür yap
+                            }, 500); 
+                        }
+                    });
+
+                    // 2. Fare ilin üzerinde hareket ettikçe kutuyu fareye yapıştır
+                    il.addEventListener("mousemove", function(e) {
+                        isimKutusu.style.left = e.pageX + "px";
+                        isimKutusu.style.top = e.pageY + "px";
+                    });
+
+                    // 3. Fare ilden çıkarsa
+                    il.addEventListener("mouseleave", function() {
+                        // Eğer 0.5 saniye dolmadan fareyi çekerse, yazının çıkmasını iptal et
+                        clearTimeout(beklemeSuresi); 
+                        
+                        // Kutuyu tekrar görünmez yap
+                        isimKutusu.style.opacity = "0"; 
+                    });
+
+                    // 4. İle tıklanınca sayfaya git
+                    il.addEventListener("click", function() {
+                        const ilID = this.getAttribute("id"); 
+                        if (ilID) {
+                            window.location.href = "sehir.html?il=" + ilID;
+                        }
+                    });
                 });
-            });
-        })
-        .catch(hata => console.error("Harita Yükleme Hatası:", hata));
-</script>
+            })
+            .catch(hata => console.error("Harita Yükleme Hatası:", hata));
+    </script>
 
 </body>
 </html>
