@@ -3,107 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traverten Türkiye Haritası</title>
+    <title>Kamp Alanları Rehberi</title>
     
     <style>
         body {
-            font-family: sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; /* Doğa konseptine uygun hafif yeşilimsi gri */
             margin: 0;
+            padding: 0;
+            color: #2c3e50;
+        }
+
+        /* Üst Kısım (Başlık Alanı) - Kamp Konsepti: Orman Yeşili */
+        .baslik-alani {
+            background-color: #2e7d32; 
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .baslik-alani h1 {
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: 2px;
+            text-transform: capitalize;
+        }
+
+        .baslik-alani p {
+            margin-top: 10px;
+            font-size: 18px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .icerik-kapsayici {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .kamp-izgarasi {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Kamp Kartı Tasarımı */
+        .kamp-karti {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .kamp-karti:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(46, 125, 50, 0.2); 
+        }
+
+        .kamp-karti img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        /* Tesis Tipi Etiketi (Ücretli/Ücretsiz) */
+        .kamp-tipi {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #f39c12;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .kamp-icerik {
             padding: 20px;
         }
 
-        /* Başlık için özel ayarlar ve renk geçişi (transition) */
-        #harita-basligi { 
-            text-align: center; 
-            color: #333; 
-            transition: color 0.3s ease;
-            min-height: 40px; /* Yazı değişirken sayfanın zıplamasını engeller */
+        .kamp-icerik h3 {
+            margin: 0 0 10px 0;
+            color: #2e7d32;
+            font-size: 20px;
         }
 
-        #harita-alani {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto; 
-            display: block;
+        .kamp-icerik p {
+            margin: 0;
+            color: #555;
+            line-height: 1.5;
+            font-size: 15px;
         }
 
-        #harita-alani svg { width: 100%; height: auto; }
-
-        #harita-alani svg path {
-            fill: #c94917 !important; 
-            stroke: #ffffff; 
-            stroke-width: 1.5;
-            cursor: pointer;
-            transition: all 0.3s ease; 
-            transform-origin: center;  
-            transform-box: fill-box;   
+        .geri-don {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 24px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s;
         }
 
-        /* İlin Üzerine Gelince (Koyu Kırmızı ve Büyüme) */
-        #harita-alani svg path:hover {
-            fill: #ffc27c !important; 
-            transform: scale(1.2); 
+        .geri-don:hover {
+            background-color: #2e7d32;
+        }
+
+        .hata-mesaji {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
     </style>
 </head>
 <body>
 
-    <h2 id="harita-basligi">Lütfen Bir İl Seçiniz</h2>
-
-    <div id="harita-alani">
-        <p style="text-align:center; color:#666;">Harita yükleniyor...</p>
+    <div class="baslik-alani">
+        <h1 id="sayfa-basligi">Yükleniyor...</h1>
+        <p id="sayfa-aciklamasi"></p>
     </div>
 
- <script>
-        fetch('turkey.svg')
-            .then(response => response.text())
-            .then(svgKod => {
-                document.getElementById('harita-alani').innerHTML = svgKod;
+    <div class="icerik-kapsayici">
+        <div class="kamp-izgarasi" id="kamp-alani">
+            </div>
 
-                // Yine çizimleri (path) seçiyoruz çünkü fareyle onların üstüne geleceğiz
-                const iller = document.querySelectorAll("#harita-alani svg path");
-                
-                const haritaBasligi = document.getElementById("harita-basligi");
-                const varsayilanYazi = "Lütfen Bir İl Seçiniz";
+        <div style="text-align: center;">
+            <a href="index.html" class="geri-don">← Haritaya Geri Dön</a>
+        </div>
+    </div>
 
-                iller.forEach(il => {
-                    // Fare ilin (çizimin) üzerine geldiğinde
-                    il.addEventListener("mouseenter", function() {
-                        
-                        // İŞTE YENİ SİHRİMİZ BURADA: 
-                        // "this.parentNode" diyerek path'in dışındaki <g> etiketine ulaşıyoruz.
-                        // Sonra da onun içindeki 'data-city-name' bilgisini okuyoruz.
-                        const ilAnaGrubu = this.parentNode;
-                        const sehirAdi = ilAnaGrubu.getAttribute("data-city-name");
-                        
-                        // Eğer gerçekten bir isim bulduysak başlığa yazdır
-                        if (sehirAdi) {
-                            haritaBasligi.innerText = sehirAdi;
-                            haritaBasligi.style.color = "#8b0000"; 
-                        }
-                    });
+    <script>
+        const urlParametreleri = new URLSearchParams(window.location.search);
+        const secilenIl = urlParametreleri.get('il');
 
-                    // Fare ilden çıkınca
-                    il.addEventListener("mouseleave", function() {
-                        haritaBasligi.innerText = varsayilanYazi;
-                        haritaBasligi.style.color = "#333"; 
-                    });
+        // Kamp Alanları Veritabanı
+        const kampRehberi = {
+            "antalya": {
+                baslik: "Antalya Kamp Alanları",
+                aciklama: "Akdeniz'in masmavi suları ve çam ormanlarının birleştiği en güzel kamp rotaları.",
+                kamplar: [
+                    { ad: "Kaş Kamping", gorsel: "https://images.unsplash.com/photo-1504280390267-3144811b7a2b?auto=format&fit=crop&w=600&q=80", yazi: "Denize sıfır, zeytin ağaçları altında hem çadır hem karavan kampı yapabileceğiniz harika bir tesis.", tipi: "Ücretli" },
+                    { ad: "Korsan Koyu Kamp Alanı", gorsel: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=600&q=80", yazi: "Olympos yakınlarında, doğayla iç içe ve sakinliği arayanlar için muazzam bir koy.", tipi: "Ücretsiz" }
+                ]
+            },
+            "bolu": {
+                baslik: "Bolu Kamp Alanları",
+                aciklama: "Gölleri, sık ormanları ve serin havasıyla doğa tutkunlarının vazgeçilmezi.",
+                kamplar: [
+                    { ad: "Yedigöller Milli Parkı", gorsel: "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=600&q=80", yazi: "Sonbaharda yaprakların binbir rengi arasında göl kenarında eşsiz bir çadır deneyimi.", tipi: "Ücretli" },
+                    { ad: "Sülüklügöl Kamp Alanı", gorsel: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=600&q=80", yazi: "Telefonun çekmediği, tam anlamıyla doğaya ve sessizliğe doyacağınız bakir bir alan.", tipi: "Ücretsiz" }
+                ]
+            },
+            "istanbul": {
+                baslik: "İstanbul Kamp Alanları",
+                aciklama: "Metropolden kaçıp doğaya sığınmak isteyenler için saklı kalmış köşeler.",
+                kamplar: [
+                    { ad: "Şile Sahil Kamp", gorsel: "https://images.unsplash.com/photo-153756526675b-34008630121a?auto=format&fit=crop&w=600&q=80", yazi: "Karadeniz kıyısında, dalga sesleri eşliğinde hem orman hem deniz kampı.", tipi: "Ücretli" },
+                    { ad: "Kilyos Doğada Yaşam", gorsel: "https://images.unsplash.com/photo-1496080174650-637e3f22fa03?auto=format&fit=crop&w=600&q=80", yazi: "Hafta sonu kaçamakları için ideal, temel ihtiyaçlarınızı karşılayabileceğiniz tesisli alan.", tipi: "Ücretli" }
+                ]
+            }
+        };
 
-                    // Tıklanınca yeni sayfaya gitme
-                    il.addEventListener("click", function() {
-                        const ilAnaGrubu = this.parentNode;
-                        // İlin küçük harfli ID'sini alıyoruz (örn: "adana")
-                        const ilID = ilAnaGrubu.getAttribute("id"); 
-                        
-                        if (ilID) {
-                            window.location.href = "sehir.html?il=" + ilID;
-                        }
-                    });
-                });
-            })
-            .catch(hata => console.error("Harita Yükleme Hatası:", hata));
+        const kampAlaniDivi = document.getElementById('kamp-alani');
+        const baslikElementi = document.getElementById('sayfa-basligi');
+        const aciklamaElementi = document.getElementById('sayfa-aciklamasi');
+
+        if (secilenIl && kampRehberi[secilenIl]) {
+            const veriler = kampRehberi[secilenIl];
+            
+            baslikElementi.innerText = veriler.baslik;
+            aciklamaElementi.innerText = veriler.aciklama;
+
+            let kartlarHTML = "";
+            veriler.kamplar.forEach(kamp => {
+                // Tesis tipine göre etiket rengini belirliyoruz
+                let etiketRengi = kamp.tipi === "Ücretsiz" ? "#27ae60" : "#e67e22";
+
+                kartlarHTML += `
+                    <div class="kamp-karti">
+                        <span class="kamp-tipi" style="background-color: ${etiketRengi}">${kamp.tipi}</span>
+                        <img src="${kamp.gorsel}" alt="${kamp.ad}">
+                        <div class="kamp-icerik">
+                            <h3>${kamp.ad}</h3>
+                            <p>${kamp.yazi}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            kampAlaniDivi.innerHTML = kartlarHTML;
+
+        } else {
+            let formatliIsim = secilenIl ? secilenIl.charAt(0).toUpperCase() + secilenIl.slice(1) : "Şehir";
+            baslikElementi.innerText = formatliIsim + " Kamp Alanları";
+            aciklamaElementi.innerText = "Detaylar hazırlanıyor...";
+            
+            kampAlaniDivi.innerHTML = `
+                <div class="hata-mesaji" style="grid-column: 1 / -1;">
+                    <h2>Bu şehrin kamp rehberi henüz keşfedilmedi.</h2>
+                    <p>Çok yakında ${formatliIsim} için en iyi çadır ve karavan alanları buraya eklenecektir.</p>
+                </div>
+            `;
+        }
     </script>
-
 </body>
 </html>
