@@ -148,6 +148,23 @@
 
         // Kamp Alanları Veritabanı
         const kampRehberi = {
+            "istanbul-anadolu": {
+                baslik: "İstanbul Kamp Alanları",
+                aciklama: "Metropolden kaçıp doğaya sığınmak isteyenler için saklı kalmış köşeler.",
+                kamplar: [
+                    { ad: "Şile Sahil Kamp", gorsel: "https://images.unsplash.com/photo-153756526675b-34008630121a?auto=format&fit=crop&w=600&q=80", yazi: "Karadeniz kıyısında, dalga sesleri eşliğinde hem orman hem deniz kampı.", tipi: "Ücretli" },
+                   { ad: "Büyükada Glamping", gorsel: "imagesistanbul/büyükadaglamping.jpg", yazi: "Hafta sonu kaçamakları için ideal, temel ihtiyaçlarınızı karşılayabileceğiniz tesisli alan.", tipi: "Ücretli" },
+                    { ad: "Burgazada – Madam Martha Koyu", gorsel: "imagesistanbul/madammartha.jpg", yazi: "Adalar içinde sessizliği ve temiz denizi ile bilinen bir koy. Şehirden uzak ada atmosferi sunuyor.", tipi: "Ücretsiz" }
+                ]
+            },
+            "istanbul-avrupa": {
+                baslik: "İstanbul Kamp Alanları",
+                aciklama: "Metropolden kaçıp doğaya sığınmak isteyenler için saklı kalmış köşeler.",
+                kamplar: [
+                    { ad: "Çilingoz Ormanı Tabiat Parkı Kamp Alanı", gorsel: "imagesistanbul/cilingoz.jpg", yazi: "Karadeniz kıyısında, dalga sesleri eşliğinde hem orman hem deniz kampı.", tipi: "Ücretli" },
+                     { ad: "Kumköy Kilyos Kamp Alanı", gorsel: "imagesistanbul/kilyoskamp.jpg", yazi: "Karadeniz kıyısında yer alan bu sahil, İstanbul’a yakınlığı ile bilinir. Yaz aylarında serin rüzgarı ve geniş plajı ile tercih edilir.", tipi: "Ücretsiz" },
+                ]
+            },
             "antalya": {
                 baslik: "Antalya Kamp Alanları",
                 aciklama: "Akdeniz'in masmavi suları ve çam ormanlarının birleştiği en güzel kamp rotaları.",
@@ -164,24 +181,7 @@
                     { ad: "Sülüklügöl Kamp Alanı", gorsel: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=600&q=80", yazi: "Telefonun çekmediği, tam anlamıyla doğaya ve sessizliğe doyacağınız bakir bir alan.", tipi: "Ücretsiz" }
                 ]
             },
-            "istanbul-asya": {
-                baslik: "İstanbul Kamp Alanları",
-                aciklama: "Metropolden kaçıp doğaya sığınmak isteyenler için saklı kalmış köşeler.",
-                kamplar: [
-                    { ad: "Şile Sahil Kamp", gorsel: "https://images.unsplash.com/photo-153756526675b-34008630121a?auto=format&fit=crop&w=600&q=80", yazi: "Karadeniz kıyısında, dalga sesleri eşliğinde hem orman hem deniz kampı.", tipi: "Ücretli" },
-                   { ad: "Büyükada Glamping", gorsel: "imagesistanbul/büyükadaglamping.jpg", yazi: "Hafta sonu kaçamakları için ideal, temel ihtiyaçlarınızı karşılayabileceğiniz tesisli alan.", tipi: "Ücretli" },
-                    { ad: "Burgazada – Madam Martha Koyu", gorsel: "imagesistanbul/madammartha.jpg", yazi: "Adalar içinde sessizliği ve temiz denizi ile bilinen bir koy. Şehirden uzak ada atmosferi sunuyor.", tipi: "Ücretsiz" }
-                ]
-            },
-            "istanbul-avrupa": {
-                baslik: "İstanbul Kamp Alanları",
-                aciklama: "Metropolden kaçıp doğaya sığınmak isteyenler için saklı kalmış köşeler.",
-                kamplar: [
-                    { ad: "Çilingoz Ormanı Tabiat Parkı Kamp Alanı", gorsel: "imagesistanbul/cilingoz.jpg", yazi: "Karadeniz kıyısında, dalga sesleri eşliğinde hem orman hem deniz kampı.", tipi: "Ücretli" },
-                    { ad: "", gorsel: "imagesistanbul/cilingoz", yazi: "Karadeniz kıyısında, dalga sesleri eşliğinde hem orman hem deniz kampı.", tipi: "Ücretli" },
-                     { ad: "Kumköy Kilyos Kamp Alanı", gorsel: "imagesistanbul/kilyoskamp.jpg", yazi: "Karadeniz kıyısında yer alan bu sahil, İstanbul’a yakınlığı ile bilinir. Yaz aylarında serin rüzgarı ve geniş plajı ile tercih edilir.", tipi: "Ücretsiz" },
-                ]
-            },
+            
             "kirklareli": {
                 baslik: "Kırklareli Kamp Alanları", 
                 aciklama: "Longoz ormanlarının serinliği ve Karadeniz'in saklı koylarıyla doğanın kalbinde huzurlu bir kaçamak.",
@@ -213,6 +213,46 @@
                     { ad: "Kömür Limanı", gorsel: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=600&q=80", yazi: "Gelibolu Yarımadası'nda dalgıçların uğrak noktası olan, tesisin bulunmadığı ve yıldızların en net izlendiği ücretsiz sahil.", tipi: "Ücretsiz" },
                     { ad: "Bozcaada Beylik Koyu", gorsel: "https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?auto=format&fit=crop&w=600&q=80", yazi: "Bozcaada'nın güneyinde, karaya oturmuş meşhur geminin hemen yanında, turkuaz sulara uyanacağınız ücretsiz kamp alanı.", tipi: "Ücretsiz" },
                     { ad: "Kaz Dağları Darıdere", gorsel: "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=600&q=80", yazi: "Buz gibi şelale sularının kenarında, oksijene doyacağınız orman içi ücretsiz çadır ve karavan kampı.", tipi: "Ücretsiz" }
+                ]
+            },
+            "balikesir": {
+                baslik: "Balıkesir",
+                aciklama: "Kaz Dağları'nın eteklerinden Kapıdağ Yarımadası'na uzanan, Ege ve Marmara'nın kesiştiği doğa harikası rotalar.",
+                kamplar: [
+                    { ad: "Kapıdağ Orman Kampı", gorsel: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=600&q=80", yazi: "Erdek Kapıdağ Yarımadası'nda, ormanın denize kavuştuğu ıssız koylarda hiçbir tesisin olmadığı efsanevi ücretsiz kamp noktaları.", tipi: "Ücretsiz" },
+                    { ad: "Patriça Koyu", gorsel: "https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?auto=format&fit=crop&w=600&q=80", yazi: "Ayvalık Cunda Adası'nın en uç noktasında, zeytin ağaçlarının gölgesinde yıldızları izleyebileceğiniz ücretsiz doğa kampı.", tipi: "Ücretsiz" }
+                ]
+            },
+            "sakarya": {
+                baslik: "Sakarya",
+                aciklama: "Serin yaylaları ve etrafı çamlarla kaplı gölleriyle İstanbul'a çok yakın bir nefes alma noktası.",
+                kamplar: [
+                    { ad: "Acelle Yaylası", gorsel: "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=600&q=80", yazi: "Ortasından gölet geçen, geniş çimenlik alanlarıyla tam bir Karadeniz havası yaşatan, ateş yakmaya uygun ücretsiz yayla kampı.", tipi: "Ücretsiz" },
+                    { ad: "Karagöl Yaylası", gorsel: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=600&q=80", yazi: "Taraklı ilçesinde, devasa çam ağaçlarının arasında uyanacağınız sessiz, sakin ve tamamen ücretsiz kamp alanı.", tipi: "Ücretsiz" }
+                ]
+            },
+            "kocaeli": {
+                baslik: "Kocaeli",
+                aciklama: "Sanayi şehri algısını tamamen yıkan, derin vadiler ve gizli kalmış muazzam yaylalar.",
+                kamplar: [
+                    { ad: "İnönü Yaylası", gorsel: "https://images.unsplash.com/photo-1504280390267-3144811b7a2b?auto=format&fit=crop&w=600&q=80", yazi: "Yuvacık taraflarında, ortasından şırıl şırıl dere akan, doğa yürüyüşçülerinin ve vahşi kamp sevenlerin ücretsiz buluşma noktası.", tipi: "Ücretsiz" },
+                    { ad: "Menekşe Yaylası", gorsel: "https://images.unsplash.com/photo-153756526675b-34008630121a?auto=format&fit=crop&w=600&q=80", yazi: "Yüksek rakımlı, temiz havası ve orman dokusuyla izole bir kamp deneyimi arayanlar için ücretsiz harika bir rota.", tipi: "Ücretsiz" }
+                ]
+            },
+            "yalova": {
+                baslik: "Yalova",
+                aciklama: "Şelaleleri ve dipsiz gölleriyle doğanın kalbinde küçük ama sürprizlerle dolu bir kamp diyarı.",
+                kamplar: [
+                    { ad: "Dipsiz Göl", gorsel: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=600&q=80", yazi: "Teşvikiye ormanlarının derinliklerinde, iki ayrı krater gölünün kenarında huzur dolu ücretsiz bir çadır kampı.", tipi: "Ücretsiz" },
+                    { ad: "Delmece Yaylası", gorsel: "https://images.unsplash.com/photo-1627230009477-8098c4b92b61?auto=format&fit=crop&w=600&q=80", yazi: "Çınarcık sırtlarında, geniş çayırları ve tertemiz kaynak sularıyla doğayla baş başa kalabileceğiniz ücretsiz alan.", tipi: "Ücretsiz" }
+                ]
+            },
+            "bilecik": {
+                baslik: "Bilecik",
+                aciklama: "Kuruluşun toprağı, el değmemiş göletleri ve asırlık çam ormanlarıyla Marmara'nın gizli bahçesi.",
+                kamplar: [
+                    { ad: "Bozcaarmut Göleti", gorsel: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=600&q=80", yazi: "Pazaryeri ilçesinde, çam ağaçlarının göle yansıdığı manzaraya karşı ateşinizi yakabileceğiniz kusursuz ve ücretsiz doğa kampı.", tipi: "Ücretsiz" },
+                    { ad: "Kömürsu Yaylası", gorsel: "https://images.unsplash.com/photo-1574068529241-1181530e163b?auto=format&fit=crop&w=600&q=80", yazi: "Bozüyük eteklerinde, kaynak suları ve rengarenk çiçekleri arasında sessizliğin sesini dinleyeceğiniz ücretsiz yayla kampı.", tipi: "Ücretsiz" }
                 ]
             }
 
